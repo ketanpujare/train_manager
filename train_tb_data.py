@@ -1,6 +1,8 @@
-import requests
+# -*- coding: utf-8 -*-
+
 from csv import writer
 from lxml import html
+import requests
 
 
 page = requests.get('http://konkanrailway.com:8080/TrainSchedule/trainschedule.action')
@@ -67,5 +69,5 @@ def trains_data(train_list):
             #csv.writerow(['Train No.','Train Name','Days Run'])
             csv.writerow([train_no,train_name,days_run])
 
-trains_data(train_list)
+#trains_data(train_list)
 #train_tb(train_list)
