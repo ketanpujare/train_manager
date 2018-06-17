@@ -1,26 +1,33 @@
 # -*- coding: utf-8 -*-
 import pygame
 
-pygame.display.init()
+#pygame.display.init()
 
-display_width = 800
+display_width = 1200
 display_height = 600
 
 black = (0,0,0)
 white = (255,255,255)
 red = (255,0,0)
+green = (0,255,0)
+grey = (169,169,169)
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('Train Manager')
 clock = pygame.time.Clock()
 
-trainImg = pygame.image.load('blue.png')
 
-def train(x,y):
-    gameDisplay.blit(trainImg,(x,y))
 
-x = 100
-y = 200
+def signal(x,y,color):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+
+    if x-10 < mouse[0] < x+10 and y-10 < mouse[1] < y+10 and click[0]==1:
+        color = red
+
+    pygame.draw.circle(gameDisplay,color,(x,y),10)
+     
+
 
 gameExit = False
 
@@ -31,7 +38,9 @@ while not gameExit:
             quit()
 
     gameDisplay.fill(white)
-    train(x,y)
+    signal(100,100,green)
+    signal(100,120,red)
+
 
     pygame.display.update()
     clock.tick(60)
