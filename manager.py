@@ -49,16 +49,26 @@ class Line:
 
         pygame.draw.line(gameDisplay,color,(startx,starty),(endx,endy),width)
 
-# class Station:
-#     def station(self,startx,starty,endx,endy,color=grey,width=7):
-#         self.color = color
-#         self.startx = startx
-#         self.starty = starty        
-#         self.endx = endx
-#         self.endy = endy
-#         self.width = width
+# class Train:
+#     def train(self,railline,pos,move,t_type=blue):
+#         self.railline = railline
+#         self.pos = pos
+#         self.move = move
+#         self.t_type = t_type
 
-#         pygame.draw.line(gameDisplay,color,(startx,starty),(endx,endy),width)
+#         # pos_index = railline.index(pos)
+#         # for i in range(pos_index:len(railline)):
+#         #     if '0' in pos:
+#         #         if mov == 'UP':
+#         #         signal = str(pos) + 'su'
+#         #         while signal_d[signal][2] == (0,255,0):
+
+
+
+
+
+
+        
 
 
 #Stations
@@ -70,6 +80,16 @@ for ts in train_stations:
     for i in range(ts[1]+1):
         railine_var = ts[0]+str(i)
         railline.append(railine_var)
+
+print railline[::-1]
+
+#RailLine Instances
+rl_list = []
+station_list = []
+for rl in railline:
+    rl = Line()
+    rl_list.append(rl)
+
 
 #Rail Line & Signal Automation
 rld = {}
@@ -87,7 +107,7 @@ for rl in railline:
     #End of Screen
     if start >= 1150:
         start = 20
-        rly1 = 220
+        rly1 += 100
     
     #Station Platform differentiation form Railline(Gray Color)
     if '0' in rl:
@@ -115,15 +135,12 @@ for rl in railline:
     start += length+10
 
 
-#print rld
-#print signal_d
 
-#RailLine Instances
-rl_list = []
-station_list = []
-for rl in railline:
-    rl = Line()
-    rl_list.append(rl)
+#print rld
+
+#Train
+
+
 
 
 #Game Loop
@@ -142,10 +159,6 @@ while not gameExit:
         # rn0sc   = rn0.signal(55,105,rn0sc)
 
     #RaiLine
-    rlcolor = black
-    rly1    = 120
-    start   = 10
-    length  = 40
     for rl,i in zip(rl_list,rld):
         rl.line(rld [i][0],rld [i][1],rld [i][2],rld [i][3],rld [i][4])
         #rn0.line(10,rly1,50,rly1,color)
