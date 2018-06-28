@@ -3,6 +3,8 @@ import threading
 import pygame
 import time
 
+pygame.mixer.init()
+
 display_width = 1200
 display_height = 600
 
@@ -15,11 +17,9 @@ grey  = (169,169,169)
 
 pink = (255, 0, 102)
 
-
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('Train Manager')
 clock = pygame.time.Clock()
-
 
 class Signal:
     def signal(self,x,y,color):
@@ -122,83 +122,32 @@ for rl in railline:
 
 rev_railline = railline[::-1]
 
-class Train:
-    def train_pos(self,move,color,pos,railline):
-        self.move = move
-        self.color = color
-        self.pos = pos
-        self.railline = railline
+def train_pos(railline,move,color,pos='niv1'):
+    pos_index = railline.index(pos)
+    first_pos = pos_index
+    for i in range(pos_index,len(railline)):
+        if '0' in railline[i]:
+            while signal_d[railline[i]+move][2] != green:
+                if i != first_pos:
+                    rld[railline[i-1]][4] = grey
+                else:
+                    rld[railline[i-1]][4] = black
+                rld[railline[i]][4] = color
 
-        if move is 'sd':
-            railline = rev_railline
-        pos_index = railline.index(pos)
-        print 'In Class'
-        first_pos = pos_index
-        for i in range(pos_index,len(railline)):
-            if '0' in railline[i]:
-                while signal_d[railline[i]+move][2] != red:
-                    if i != first_pos:
-                        rld[railline[i-1]][4] = grey
-                    else:
-                        rld[railline[i-1]][4] = black
-                    rld[railline[i]][4] = color
+        if i != first_pos:
+            rld[railline[i-1]][4] = black
+        rld[railline[i]][4] = color
+        time.sleep(1)
 
-            if i != first_pos:
-                rld[railline[i-1]][4] = black
-            rld[railline[i]][4] = color
-            time.sleep(0.1)
+t1 = threading.Thread(target=train_pos,args=(railline,'su',blue,'rn1'))
+t2 = threading.Thread(target=train_pos,args=(railline,'su',blue,'vbw2'))
+t3 = threading.Thread(target=train_pos,args=(railline,'su',blue,'niv1'))
+t4 = threading.Thread(target=train_pos,args=(rev_railline,'sd',blue,'kkw0'))
 
-    def train(self,move,color,pos,railline,train_no):
-        self.move = move
-        self.color = color
-        self.pos = pos
-        self.railline = railline
-        self.train_no = train_no
-
-        self.run(move,color,pos,railline,train_no)
-        
-
-    def run(self,move,color,pos,railline,train_no):
-        self.move = move
-        self.color = color
-        self.pos = pos
-        self.railline = railline
-        self.train_no = train_no
-        train_no = threading.Thread(target=self.train_pos,args=(move,color,pos,railline))
-        train_no.start()
-        train_no.join()
-
-            
-
-t1 = Train()
-
-
-# def train_pos(railline,move,color,pos='niv1'):
-#     pos_index = railline.index(pos)
-#     first_pos = pos_index
-#     for i in range(pos_index,len(railline)):
-#         if '0' in railline[i]:
-#             while signal_d[railline[i]+move][2] != green:
-#                 if i != first_pos:
-#                     rld[railline[i-1]][4] = grey
-#                 else:
-#                     rld[railline[i-1]][4] = black
-#                 rld[railline[i]][4] = color
-
-#         if i != first_pos:
-#             rld[railline[i-1]][4] = black
-#         rld[railline[i]][4] = color
-#         time.sleep(1)
-
-# t1 = threading.Thread(target=train_pos,args=(railline,'su',blue,'rn1'))
-# t2 = threading.Thread(target=train_pos,args=(railline,'su',blue,'vbw2'))
-# t3 = threading.Thread(target=train_pos,args=(railline,'su',blue,'niv1'))
-# t4 = threading.Thread(target=train_pos,args=(rev_railline,'sd',blue,'kkw0'))
-
-# t1.start()
-# t2.start()
-# t3.start()
-# t4.start()
+t1.start()
+t2.start()
+t3.start()
+t4.start()
 
 
 #Game Loop
@@ -207,7 +156,7 @@ while not gameExit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            quit()
+            exit()
 
     gameDisplay.fill(white)
     
@@ -220,9 +169,6 @@ while not gameExit:
     for rl,i in zip(rl_list,rld):
         rl.line(rld [i][0],rld [i][1],rld [i][2],rld [i][3],rld [i][4])
         #rn0.line(10,rly1,50,rly1,color)
-
-    print 'Out Class'
-    t1.train('su',blue,'rn1',railline,'t11')
 
     pygame.display.update()
     clock.tick(20)
